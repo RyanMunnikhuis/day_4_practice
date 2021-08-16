@@ -1,0 +1,112 @@
+---
+title: "Loops and Conditions"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(skimr)
+library(janitor)
+library(here)
+```
+
+```{r}
+
+weekdays = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+
+transects = c("Transect A", "Transect B", "Transect C")
+
+weekday_matrix = matrix(ncol = length(transects), nrow = length(weekdays))
+
+for (i in seq_along(transects)) { 
+  for (j in seq_along(weekdays)) { 
+  p = paste(weekdays[j], "-", transects[i])
+  weekday_matrix[j, i] = p
+    
+    }
+} 
+
+weekday_matrix 
+```
+
+```{r}
+force  = function(m, a) {
+  f = m * a
+  print(paste("The resulting force is", f, "Newtons."))
+}
+force(m = 12, a = 13)
+
+```
+```{r}
+name_column = function(df, numb) {
+  if (numb < 1) {
+    stop("this is not a column") 
+      } else if (numb > ncol(df)) {
+        stop("This not a column")
+      
+        } else (names(df[numb])) 
+
+  }
+  
+name_column(df = mtcars, numb = 5) 
+
+
+```
+```{r}
+fish_parms = data.frame(sci_name = c("Chanos chanos", "Sphyraena barracuda", "Caranx ignobilis"),
+                        common_name = c("Milkfish", "Great barracuda", "Giant trevally"), 
+                        a_est = c(0.0905, 0.0181, 0.0353), 
+                        b_est = c(2.52, 3.27, 3.05))  
+
+fish_parms 
+
+fish_vec = seq(from = 0, to = 100, by = 1)
+
+fish_vec
+
+fish_weight = function(fish_name, tot_length) {
+  
+  fish_select = filter(fish_parms, common_name == fish_name)
+  
+  fish_weight_calc = fish_select$a_est * (tot_length ^fish_select$b_est)
+  return(fish_weight_calc)
+  }
+
+fish_weight(fish_name = "Milkfish", tot_length =  11)
+
+milkfish_weight = fish_weight(fish_name = "Milkfish", tot_length = fish_vec)
+
+milkfish_weight
+```
+```{r}
+
+wave_height_seq = seq(from = 0, to = 3, by = 0.2)
+
+wave_power = function(height, period) {
+  
+  wave_deep = 0.5 * height ^ 2 * period
+  return(wave_deep)
+  
+}
+
+wave_power(wave_height_seq, 8)
+
+```
+
+```{r}
+wave_power_s = function (height, period, depth) {
+  if (depth < 12) {
+    message("deep wave")
+    p = 0.5 * height ^ 2 * period
+  } else if (depth <= 12) {
+    message("wave shallow")
+    p = 0.81 * height ^ 2 * period
+  }
+return(p)
+}
+
+wave_power_s(12, 12, 12)
+
+```
+
